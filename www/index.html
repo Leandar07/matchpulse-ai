@@ -1,1 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MatchPulse AI</title>
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --card: #151a22;
+      --border: #252d3a;
+      --text: #eef2f7;
+      --muted: #8b96a8;
+      --accent: #22c55e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 900px; margin: 0 auto; }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    h1 { font-size: 1.35rem; }
+    .controls { display: flex; gap: 8px; align-items: center; }
+    select, button {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    button { background: var(--accent); color: #06210f; font-weight: 600; border: none; }
+    .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 760px) {
+      .grid { grid-template-columns: 1.35fr 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      overflow-x: auto;
+    }
+    h2 { font-size: 1.05rem; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { padding: 7px 6px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--muted); font-weight: 600; }
+    .num { text-align: right; }
+    .fixture {
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+    .fixture:last-child { border-bottom: none; }
+    .sub { color: var(--muted); font-size: 0.8rem; }
+    .status { color: #f87171; margin-bottom: 12px; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>MatchPulse AI</h1>
+      <div class="controls">
+        <select id="leagueSelect">
+          <option value="PL">Premier League (PL)</option>
+          <option value="PD">La Liga (PD)</option>
+          <option value="SA">Serie A (SA)</option>
+          <option value="BL1">Bundesliga (BL1)</option>
+          <option value="FL1">Ligue 1 (FL1)</option>
+          <option value="CL">Champions League (CL)</option>
+        </select>
+        <button id="refreshBtn" type="button">Refresh</button>
+      </div>
+    </header>
 
+    <div class="meta" id="metaText">Loading...</div>
+    <div class="status" id="statusText"></div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Standings</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th class="num">P</th>
+              <th class="num">W</th>
+              <th class="num">D</th>
+              <th class="num">L</th>
+              <th class="num">GD</th>
+              <th class="num">Pts</th>
+            </tr>
+          </thead>
+          <tbody id="standingsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Upcoming Fixtures</h2>
+        <div id="fixturesList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var BACKEND_API_URL = "https://matchpulse-ai-3.onrender.com/api/football";[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)
+
+    var leagueSelect = document.getElementById("leagueSelect");
+    var refreshBtn = document.getElementById("refreshBtn");
+    var metaText = document.getElementById("metaText");
+    var statusText = document.getElementById("statusText");
+    var standingsBody = document.getElementById("standingsBody");
+    var fixturesList = document.getElementById("fixturesList");
+
+    function renderStandings(rows) {
+      if (!rows || !rows.length) {
+        standingsBody.innerHTML = '<tr><td colspan="8" class="sub">No standings available</td></tr>';
+        return;
+      }
+      standingsBody.innerHTML = rows.map(function (r) {
+        return "<tr>" +
+          "<td>" + r.rank + "</td>" +
+          "<td>" + r.team + "</td>" +
+          '<td class="num">' + r.played + "</td>" +
+          '<td class="num">' + r.won + "</td>" +
+          '<td class="num">' + r.draw + "</td>" +
+          '<td class="num">' + r.lost + "</td>" +
+          '<td class="num">' + r.goalDifference + "</td>" +
+          '<td class="num"><strong>' + r.points + "</strong></td>" +
+        "</tr>";
+      }).join("");
+    }
+
+    function renderFixtures(items) {
+      if (!items || !items.length) {
+        fixturesList.innerHTML = '<div class="sub">No upcoming fixtures</div>';
+        return;
+      }
+      fixturesList.innerHTML = items.map(function (m) {
+        return '<div class="fixture">' +
+          "<div><strong>" + m.homeTeam + "</strong> vs <strong>" + m.awayTeam + "</strong></div>" +
+          '<div class="sub">' + (m.date || "") + " " + (m.time || "") + "</div>" +
+        "</div>";
+      }).join("");
+    }
+
+    async function loadFootball() {
+      var league = leagueSelect.value;
+      statusText.textContent = "";
+      metaText.textContent = "Fetching " + league + " data...";
+      try {
+        var res = await fetch(BACKEND_API_URL + "?league=" + encodeURIComponent(league));
+        var data = await res.json();
+        if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+        renderStandings(data.standings);
+        renderFixtures(data.fixtures);
+        metaText.textContent = "League: " + data.league + " | Updated: " + data.updatedAt + (data.stale ? " (cached)" : "");
+      } catch (err) {
+        metaText.textContent = "Failed to load data";
+        statusText.textContent = "Error: " + err.message;
+      }
+    }
+
+    leagueSelect.addEventListener("change", loadFootball);
+    refreshBtn.addEventListener("click", loadFootball);
+    loadFootball();
+  </script>
+</body>
+</html>
