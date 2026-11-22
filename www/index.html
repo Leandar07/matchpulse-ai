@@ -1,187 +1,1315 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MatchPulse AI</title>
+  <title>AI Football Predictor PRO v2.9</title>
   <style>
-    :root {
-      --bg: #0c0f14;
-      --card: #151a22;
-      --border: #252d3a;
-      --text: #eef2f7;
-      --muted: #8b96a8;
-      --accent: #22c55e;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 16px;
+    }
+
+    body {
+      background-color: #070a0e;
+      color: #f1f5f9;
+      padding: 14px 12px 60px;
       line-height: 1.5;
     }
-    .wrap { max-width: 900px; margin: 0 auto; }
-    header {
+
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    .header {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #1e293b;
+      gap: 8px;
     }
-    h1 { font-size: 1.35rem; }
-    .controls { display: flex; gap: 8px; align-items: center; }
-    select, button {
-      background: var(--card);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 0.95rem;
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: grid;
+      place-items: center;
+      color: #052e16;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .lang-btn {
+      background: #13222b;
+      border: 1px solid #10b98188;
+      color: #34d399;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
       cursor: pointer;
+      white-space: nowrap;
     }
-    button { background: var(--accent); color: #06210f; font-weight: 600; border: none; }
-    .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; }
-    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media (min-width: 760px) {
-      .grid { grid-template-columns: 1.35fr 1fr; }
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      overflow-x: auto;
-    }
-    h2 { font-size: 1.05rem; margin-bottom: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th, td { padding: 7px 6px; border-bottom: 1px solid var(--border); text-align: left; }
-    th { color: var(--muted); font-weight: 600; }
-    .num { text-align: right; }
-    .fixture {
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border);
+
+    .season-banner {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      background: #0d1922;
+      border: 1px solid #1e3a4c;
+      border-radius: 12px;
+      padding: 9px 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
       gap: 8px;
-      font-size: 0.9rem;
+      flex-wrap: wrap;
     }
-    .fixture:last-child { border-bottom: none; }
-    .sub { color: var(--muted); font-size: 0.8rem; }
-    .status { color: #f87171; margin-bottom: 12px; font-size: 0.9rem; }
+
+    .season-pill {
+      background: #10b98122;
+      color: #34d399;
+      border: 1px solid #10b98155;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 11.5px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      background: #0f1620;
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #10b981;
+      color: #052e16;
+    }
+
+    .card {
+      background: #111822;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    select, input {
+      width: 100%;
+      background: #070a0e;
+      border: 1px solid #283548;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #f8fafc;
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    select:focus, input:focus {
+      border-color: #10b981;
+    }
+
+    .btn {
+      background: #10b981;
+      color: #052e16;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-full {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      background: #1e293b;
+      color: #f8fafc;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .fixture-list {
+      display: grid;
+      gap: 8px;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
+
+    .fixture-item {
+      background: #0a0f16;
+      border: 1px solid #222e40;
+      border-radius: 10px;
+      padding: 9px 11px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fixture-item:hover, .fixture-item.selected {
+      border-color: #10b981;
+      background: #12212a;
+    }
+
+    .fix-teams {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .fix-date {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .fix-tag {
+      font-size: 11px;
+      background: #10b98122;
+      color: #34d399;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .matchup-box {
+      display: none;
+      background: #0a0f16;
+      border: 1px solid #222e40;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .teams-versus {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .team-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .team-logo {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      background: #111822;
+      border-radius: 50%;
+      padding: 4px;
+      border: 1px solid #283548;
+    }
+
+    .team-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .vs-pill {
+      font-size: 11px;
+      font-weight: 800;
+      color: #94a3b8;
+      background: #161f2c;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .form-pills {
+      display: flex;
+      gap: 3px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .f-badge {
+      min-width: 18px;
+      height: 18px;
+      padding: 0 3px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .f-W { background: #10b981; color: #052e16; }
+    .f-D { background: #eab308; color: #1c1917; }
+    .f-L { background: #ef4444; color: #fff; }
+
+    .prob-wrap {
+      margin: 10px 0 12px;
+    }
+
+    .prob-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .prob-bar {
+      display: flex;
+      height: 11px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #070a0e;
+    }
+
+    .bar-home { background: #10b981; transition: width 0.3s; }
+    .bar-draw { background: #eab308; transition: width 0.3s; }
+    .bar-away { background: #3b82f6; transition: width 0.3s; }
+
+    .score-chips {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      background: #0a0f16;
+      border: 1px solid #263345;
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .chip-score {
+      font-size: 15px;
+      font-weight: 800;
+      color: #34d399;
+    }
+
+    .chip-prob {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .output-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .output {
+      background: #070a0e;
+      border: 1px solid #283548;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      min-height: 150px;
+      line-height: 1.7;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 8px 6px;
+      text-align: left;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    th {
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    .ok { color: #34d399; }
+    .err { color: #f87171; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>MatchPulse AI</h1>
-      <div class="controls">
-        <select id="leagueSelect">
-          <option value="PL">Premier League (PL)</option>
-          <option value="PD">La Liga (PD)</option>
-          <option value="SA">Serie A (SA)</option>
-          <option value="BL1">Bundesliga (BL1)</option>
-          <option value="FL1">Ligue 1 (FL1)</option>
-          <option value="CL">Champions League (CL)</option>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">⚡</div>
+        <span id="uiAppTitle">AI Match Predictor PRO</span>
+      </div>
+      <button class="lang-btn" id="uiLangBtn" onclick="toggleLanguage()">🌐 English</button>
+    </div>
+
+    <div class="season-banner">
+      <span id="uiSeasonInfo">AI နှစ်အလိုက် Auto-Season စနစ် အလုပ်လုပ်နေသည်</span>
+      <span class="season-pill" id="uiSeasonBadge">Season 2026–2027</span>
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:0;">
+        <select id="leagueSelect" onchange="selectLeague()">
+          <option value="4328">အင်္ဂလန် - ပရီးမီးယားလိဂ် (Premier League)</option>
+          <option value="4329">စပိန် - လာလီဂါ (La Liga)</option>
+          <option value="4332">အီတလီ - စီးရီးအေ (Serie A)</option>
+          <option value="4331">ဂျာမနီ - ဘွန်ဒက်စ်လီဂါ (Bundesliga)</option>
+          <option value="4334">ပြင်သစ် - လီဂူး ၁ (Ligue 1)</option>
+          <option value="4344">ပေါ်တူဂီ - လီဂါပေါ်တူဂယ် (Primeira Liga)</option>
+          <option value="4480">ချန်ပီယံလိဂ် (UEFA Champions League)</option>
+          <option value="4481">ယူရိုပါလိဂ် (UEFA Europa League)</option>
+          <option value="5071">ကွန်ဖရင့်စ်လိဂ် (UEFA Conference League)</option>
         </select>
-        <button id="refreshBtn" type="button">Refresh</button>
+        <button class="btn" id="refreshBtn" onclick="selectLeague()">ပြန်ဆွဲရန်</button>
       </div>
-    </header>
+      <div class="status" id="loadStatus">အဆင်သင့်ဖြစ်ပါပြီ။</div>
+    </div>
 
-    <div class="meta" id="metaText">Loading...</div>
-    <div class="status" id="statusText"></div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabPredict" onclick="switchTab('predict')">AI ခန့်မှန်ရန်</button>
+      <button class="tab-btn" id="tabTable" onclick="switchTab('table')">အမှတ်ပေးဇယား</button>
+      <button class="tab-btn" id="tabHistory" onclick="switchTab('history')">သိမ်းထားမှုများ</button>
+    </div>
 
-    <div class="grid">
+    <div id="viewPredict">
       <div class="card">
-        <h2>Standings</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Team</th>
-              <th class="num">P</th>
-              <th class="num">W</th>
-              <th class="num">D</th>
-              <th class="num">L</th>
-              <th class="num">GD</th>
-              <th class="num">Pts</th>
-            </tr>
-          </thead>
-          <tbody id="standingsBody"></tbody>
-        </table>
+        <div class="card-title" id="uiFixturesTitle">လာမည့်ပွဲစဉ်များ (2026–2027)</div>
+        <div class="fixture-list" id="fixtureList"></div>
       </div>
 
       <div class="card">
-        <h2>Upcoming Fixtures</h2>
-        <div id="fixturesList"></div>
+        <div class="card-title" id="uiManualTitle">အသင်းနှစ်သင်း AI ခွဲခြမ်းစိတ်ဖြာရန်</div>
+        <div class="row">
+          <input type="text" id="homeInput" placeholder="အိမ်ရှင်အသင်း (Home)" />
+          <input type="text" id="awayInput" placeholder="ဧည့်သည်အသင်း (Away)" />
+        </div>
+        <button class="btn btn-full" id="analyzeBtn" onclick="runProAI()">AI + H2H + Form ခန့်မှန်ချက် ထုတ်မည်</button>
+      </div>
+
+      <div class="card">
+        <div class="output-head">
+          <div class="card-title" id="uiResultTitle" style="margin:0;">AI ခန့်မှန်ချက် ရလဒ်</div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-sm" id="uiSaveBtn" onclick="saveCurrentPrediction()">သိမ်းရန်</button>
+            <button class="btn btn-sm" id="uiCopyBtn" onclick="copyOut()">ကူးယူရန်</button>
+          </div>
+        </div>
+
+        <div class="matchup-box" id="matchupBox">
+          <div class="teams-versus">
+            <div class="team-col">
+              <img id="homeLogoImg" class="team-logo" src="" alt="" />
+              <div class="team-name" id="homeNameLbl">Home</div>
+              <div class="form-pills" id="homeFormPills"></div>
+            </div>
+            <div class="vs-pill">VS</div>
+            <div class="team-col">
+              <img id="awayLogoImg" class="team-logo" src="" alt="" />
+              <div class="team-name" id="awayNameLbl">Away</div>
+              <div class="form-pills" id="awayFormPills"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prob-wrap" id="probWrap" style="display:none;">
+          <div class="prob-labels">
+            <span style="color:#10b981;" id="lblHome">Home: 0%</span>
+            <span style="color:#eab308;" id="lblDraw">သရေ: 0%</span>
+            <span style="color:#3b82f6;" id="lblAway">Away: 0%</span>
+          </div>
+          <div class="prob-bar">
+            <div class="bar-home" id="barHome" style="width:33%;"></div>
+            <div class="bar-draw" id="barDraw" style="width:34%;"></div>
+            <div class="bar-away" id="barAway" style="width:33%;"></div>
+          </div>
+        </div>
+
+        <div class="score-chips" id="scoreChips">
+          <div class="chip">
+            <div class="chip-score" id="topScore1">-</div>
+            <div class="chip-prob" id="topScore1P">#1</div>
+          </div>
+          <div class="chip">
+            <div class="chip-score" id="topScore2">-</div>
+            <div class="chip-prob" id="topScore2P">#2</div>
+          </div>
+          <div class="chip">
+            <div class="chip-score" id="topScore3">-</div>
+            <div class="chip-prob" id="topScore3P">#3</div>
+          </div>
+        </div>
+
+        <div class="output" id="outputBox">ပွဲစဉ်တစ်ခုကို ရွေးနှိပ်ပါ (သို့မဟုတ်) အသင်းနှစ်သင်း ရိုက်ထည့်ပြီး ခန့်မှန်ချက် ထုတ်ကြည့်ပါ။</div>
+        <div class="status" id="predStatus"></div>
+      </div>
+    </div>
+
+    <div id="viewTable" style="display:none;">
+      <div class="card">
+        <div class="card-title" id="tableTitle">အမှတ်ပေးဇယား</div>
+        <div class="status" id="tableSourceNote" style="margin-bottom:8px;"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr id="tableHeadRow">
+                <th>#</th>
+                <th>အသင်း</th>
+                <th>ပွဲ</th>
+                <th>နိုင်</th>
+                <th>သရေ</th>
+                <th>ရှုံး</th>
+                <th>+/-</th>
+                <th>မှတ်</th>
+              </tr>
+            </thead>
+            <tbody id="standingsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="viewHistory" style="display:none;">
+      <div class="card">
+        <div class="output-head">
+          <div class="card-title" id="uiHistoryTitle" style="margin:0;">သိမ်းဆည်းထားသော ခန့်မှန်ချက်များ</div>
+          <button class="btn btn-sm" id="uiClearBtn" onclick="clearHistory()">အကုန်ဖျက်ရန်</button>
+        </div>
+        <div id="historyList" style="display:grid; gap:10px; margin-top:10px;"></div>
       </div>
     </div>
   </div>
 
   <script>
-    var BACKEND_API_URL = "https://matchpulse-ai-3.onrender.com/api/football";
+    const BACKEND_API_URL = "https://matchpulse-ai-3.onrender.com/api/football";
 
+    const LEAGUE_TO_API_CODE = {
+      "4328": "PL",
+      "4329": "PD",
+      "4332": "SA",
+      "4331": "BL1",
+      "4334": "FL1",
+      "4480": "CL"
+    };
 
-    var leagueSelect = document.getElementById("leagueSelect");
-    var refreshBtn = document.getElementById("refreshBtn");
-    var metaText = document.getElementById("metaText");
-    var statusText = document.getElementById("statusText");
-    var standingsBody = document.getElementById("standingsBody");
-    var fixturesList = document.getElementById("fixturesList");
+    let lang = "my";
+    let currentLeagueId = "4328";
+    let standingsList = [];
+    let standingsMap = {};
+    let activeEventsList = [];
+    let lastMatchMeta = null;
+    let lastGeneratedReport = "";
+    let lastGeneratedTitle = "";
 
-    function renderStandings(rows) {
-      if (!rows || !rows.length) {
-        standingsBody.innerHTML = '<tr><td colspan="8" class="sub">No standings available</td></tr>';
-        return;
-      }
-      standingsBody.innerHTML = rows.map(function (r) {
-        return "<tr>" +
-          "<td>" + r.rank + "</td>" +
-          "<td>" + r.team + "</td>" +
-          '<td class="num">' + r.played + "</td>" +
-          '<td class="num">' + r.won + "</td>" +
-          '<td class="num">' + r.draw + "</td>" +
-          '<td class="num">' + r.lost + "</td>" +
-          '<td class="num">' + r.goalDifference + "</td>" +
-          '<td class="num"><strong>' + r.points + "</strong></td>" +
-        "</tr>";
-      }).join("");
+    const FALLBACK_BADGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='20' cy='20' r='18' fill='%231e293b'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='%2334d399' font-size='16'>⚽</text></svg>";
+
+    function getAutoSeasonInfo() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth() + 1;
+      const startYear = m >= 8 ? y : y - 1;
+      const endYear = startYear + 1;
+      const yearOffset = startYear - 2026;
+      return {
+        startYear,
+        endYear,
+        yearOffset,
+        label: `${startYear}–${endYear}`
+      };
     }
 
-    function renderFixtures(items) {
-      if (!items || !items.length) {
-        fixturesList.innerHTML = '<div class="sub">No upcoming fixtures</div>';
-        return;
-      }
-      fixturesList.innerHTML = items.map(function (m) {
-        return '<div class="fixture">' +
-          "<div><strong>" + m.homeTeam + "</strong> vs <strong>" + m.awayTeam + "</strong></div>" +
-          '<div class="sub">' + (m.date || "") + " " + (m.time || "") + "</div>" +
-        "</div>";
-      }).join("");
+    function shiftDateByYears(baseDateStr, offsetYears) {
+      if (!offsetYears) return baseDateStr;
+      const parts = (baseDateStr || "").split("-");
+      if (parts.length !== 3) return baseDateStr;
+      const yr = parseInt(parts[0], 10) + offsetYears;
+      return `${yr}-${parts[1]}-${parts[2]}`;
     }
 
-    async function loadFootball() {
-      var league = leagueSelect.value;
-      statusText.textContent = "";
-      metaText.textContent = "Fetching " + league + " data...";
+    const LEAGUE_NAMES = {
+      "4328": { my: "အင်္ဂလန် - ပရီးမီးယားလိဂ် (Premier League)", en: "England - Premier League" },
+      "4329": { my: "စပိန် - လာလီဂါ (La Liga)", en: "Spain - La Liga" },
+      "4332": { my: "အီတလီ - စီးရီးအေ (Serie A)", en: "Italy - Serie A" },
+      "4331": { my: "ဂျာမနီ - ဘွန်ဒက်စ်လီဂါ (Bundesliga)", en: "Germany - Bundesliga" },
+      "4334": { my: "ပြင်သစ် - လီဂူး ၁ (Ligue 1)", en: "France - Ligue 1" },
+      "4344": { my: "ပေါ်တူဂီ - လီဂါပေါ်တူဂယ် (Primeira Liga)", en: "Portugal - Primeira Liga" },
+      "4480": { my: "ချန်ပီယံလိဂ် (UEFA Champions League)", en: "UEFA Champions League" },
+      "4481": { my: "ယူရိုပါလိဂ် (UEFA Europa League)", en: "UEFA Europa League" },
+      "5071": { my: "ကွန်ဖရင့်စ်လိဂ် (UEFA Conference League)", en: "UEFA Conference League" }
+    };
+
+    const LEAGUES_DB = {
+      "4328": {
+        table: [
+          { intRank: 1, strTeam: "Arsenal", intPlayed: 10, intWin: 9, intDraw: 0, intLoss: 1, intGoalDifference: 10, intPoints: 27, form: ["W","W","W","W","L"] },
+          { intRank: 2, strTeam: "Brighton", intPlayed: 10, intWin: 7, intDraw: 1, intLoss: 2, intGoalDifference: 19, intPoints: 22, form: ["W","W","L","W","D"] },
+          { intRank: 3, strTeam: "Man City", intPlayed: 11, intWin: 7, intDraw: 1, intLoss: 3, intGoalDifference: 8, intPoints: 22, form: ["W","L","W","W","L"] },
+          { intRank: 4, strTeam: "Liverpool", intPlayed: 10, intWin: 5, intDraw: 3, intLoss: 2, intGoalDifference: 4, intPoints: 18, form: ["W","D","W","L","D"] },
+          { intRank: 5, strTeam: "Chelsea", intPlayed: 10, intWin: 5, intDraw: 1, intLoss: 4, intGoalDifference: 3, intPoints: 16, form: ["W","L","W","L","W"] },
+          { intRank: 6, strTeam: "Everton", intPlayed: 10, intWin: 4, intDraw: 4, intLoss: 2, intGoalDifference: 2, intPoints: 16, form: ["D","W","D","L","W"] },
+          { intRank: 7, strTeam: "Bournemouth", intPlayed: 10, intWin: 4, intDraw: 3, intLoss: 3, intGoalDifference: 2, intPoints: 15, form: ["D","W","L","D","W"] },
+          { intRank: 8, strTeam: "Brentford", intPlayed: 10, intWin: 3, intDraw: 5, intLoss: 2, intGoalDifference: 5, intPoints: 14, form: ["D","D","W","D","L"] },
+          { intRank: 9, strTeam: "Leeds", intPlayed: 10, intWin: 3, intDraw: 5, intLoss: 2, intGoalDifference: 2, intPoints: 14, form: ["D","D","W","L","D"] },
+          { intRank: 10, strTeam: "Aston Villa", intPlayed: 10, intWin: 3, intDraw: 4, intLoss: 3, intGoalDifference: -3, intPoints: 13, form: ["L","D","W","D","L"] },
+          { intRank: 11, strTeam: "Spurs", intPlayed: 10, intWin: 3, intDraw: 3, intLoss: 4, intGoalDifference: -1, intPoints: 12, form: ["D","L","W","D","L"] },
+          { intRank: 12, strTeam: "Newcastle", intPlayed: 10, intWin: 3, intDraw: 3, intLoss: 4, intGoalDifference: -3, intPoints: 12, form: ["D","L","W","D","L"] },
+          { intRank: 13, strTeam: "Hull", intPlayed: 10, intWin: 2, intDraw: 5, intLoss: 3, intGoalDifference: 0, intPoints: 11, form: ["D","L","D","W","D"] },
+          { intRank: 14, strTeam: "Fulham", intPlayed: 11, intWin: 2, intDraw: 5, intLoss: 4, intGoalDifference: -2, intPoints: 11, form: ["D","L","D","L","W"] },
+          { intRank: 15, strTeam: "Ipswich", intPlayed: 10, intWin: 3, intDraw: 2, intLoss: 5, intGoalDifference: -5, intPoints: 11, form: ["L","L","W","L","D"] },
+          { intRank: 16, strTeam: "Nott'm Forest", intPlayed: 10, intWin: 2, intDraw: 3, intLoss: 5, intGoalDifference: -4, intPoints: 9, form: ["L","D","L","W","L"] },
+          { intRank: 17, strTeam: "Coventry", intPlayed: 10, intWin: 3, intDraw: 0, intLoss: 7, intGoalDifference: -9, intPoints: 9, form: ["L","W","L","L","W"] },
+          { intRank: 18, strTeam: "Man Utd", intPlayed: 10, intWin: 1, intDraw: 5, intLoss: 4, intGoalDifference: -5, intPoints: 8, form: ["L","D","D","L","D"] },
+          { intRank: 19, strTeam: "Sunderland", intPlayed: 10, intWin: 2, intDraw: 2, intLoss: 6, intGoalDifference: -9, intPoints: 8, form: ["L","D","L","L","W"] },
+          { intRank: 20, strTeam: "Crystal Palace", intPlayed: 10, intWin: 2, intDraw: 1, intLoss: 7, intGoalDifference: -14, intPoints: 7, form: ["L","L","W","L","L"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Hull City", strAwayTeam: "Brighton", dateEvent: "2026-11-22", strTime: "21:00 (+07:00)" },
+          { strHomeTeam: "Liverpool", strAwayTeam: "Manchester United", dateEvent: "2026-11-22", strTime: "23:30 (+07:00)" },
+          { strHomeTeam: "Brentford", strAwayTeam: "Everton", dateEvent: "2026-11-24", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "Nottingham Forest", strAwayTeam: "Chelsea", dateEvent: "2026-11-28", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "Arsenal", strAwayTeam: "Manchester City", dateEvent: "2026-11-29", strTime: "23:30 (+07:00)" }
+        ]
+      },
+      "4329": {
+        table: [
+          { intRank: 1, strTeam: "Real Madrid", intPlayed: 11, intWin: 9, intDraw: 2, intLoss: 0, intGoalDifference: 17, intPoints: 29, form: ["W","W","D","W","W"] },
+          { intRank: 2, strTeam: "Barcelona", intPlayed: 11, intWin: 9, intDraw: 1, intLoss: 1, intGoalDifference: 19, intPoints: 28, form: ["W","W","W","L","W"] },
+          { intRank: 3, strTeam: "Atletico Madrid", intPlayed: 11, intWin: 7, intDraw: 3, intLoss: 1, intGoalDifference: 11, intPoints: 24, form: ["W","D","W","D","W"] },
+          { intRank: 4, strTeam: "Athletic Club", intPlayed: 11, intWin: 6, intDraw: 3, intLoss: 2, intGoalDifference: 6, intPoints: 21, form: ["W","L","D","W","W"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Barcelona", strAwayTeam: "Atletico Madrid", dateEvent: "2026-11-28", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "Real Madrid", strAwayTeam: "Athletic Club", dateEvent: "2026-11-29", strTime: "22:15 (+07:00)" }
+        ]
+      },
+      "4332": {
+        table: [
+          { intRank: 1, strTeam: "Lazio", intPlayed: 11, intWin: 9, intDraw: 2, intLoss: 0, intGoalDifference: 16, intPoints: 29, form: ["W","W","W","D","W"] },
+          { intRank: 2, strTeam: "Inter Milan", intPlayed: 11, intWin: 9, intDraw: 1, intLoss: 1, intGoalDifference: 15, intPoints: 28, form: ["W","W","W","L","W"] },
+          { intRank: 3, strTeam: "Roma", intPlayed: 11, intWin: 8, intDraw: 3, intLoss: 0, intGoalDifference: 21, intPoints: 27, form: ["W","D","W","W","D"] },
+          { intRank: 4, strTeam: "AC Milan", intPlayed: 11, intWin: 7, intDraw: 3, intLoss: 1, intGoalDifference: 10, intPoints: 24, form: ["W","D","W","D","W"] },
+          { intRank: 5, strTeam: "Como 1907", intPlayed: 11, intWin: 7, intDraw: 2, intLoss: 2, intGoalDifference: 8, intPoints: 23, form: ["W","L","W","W","D"] },
+          { intRank: 6, strTeam: "Frosinone", intPlayed: 11, intWin: 6, intDraw: 2, intLoss: 3, intGoalDifference: 9, intPoints: 20, form: ["W","D","L","W","W"] },
+          { intRank: 7, strTeam: "Juventus", intPlayed: 11, intWin: 5, intDraw: 3, intLoss: 3, intGoalDifference: 3, intPoints: 18, form: ["D","W","L","D","W"] },
+          { intRank: 8, strTeam: "Bologna", intPlayed: 11, intWin: 5, intDraw: 2, intLoss: 4, intGoalDifference: 2, intPoints: 17, form: ["W","L","D","W","L"] },
+          { intRank: 9, strTeam: "Cagliari", intPlayed: 11, intWin: 5, intDraw: 1, intLoss: 5, intGoalDifference: -5, intPoints: 16, form: ["L","W","W","L","L"] },
+          { intRank: 10, strTeam: "Napoli", intPlayed: 11, intWin: 4, intDraw: 3, intLoss: 4, intGoalDifference: 4, intPoints: 15, form: ["D","W","L","D","L"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Juventus", strAwayTeam: "Venezia", dateEvent: "2026-11-22", strTime: "18:30 (+07:00)" },
+          { strHomeTeam: "AC Milan", strAwayTeam: "Frosinone", dateEvent: "2026-11-23", strTime: "00:00 (+07:00)" },
+          { strHomeTeam: "Atalanta", strAwayTeam: "Inter Milan", dateEvent: "2026-11-23", strTime: "02:45 (+07:00)" },
+          { strHomeTeam: "Como 1907", strAwayTeam: "Juventus", dateEvent: "2026-11-30", strTime: "02:45 (+07:00)" }
+        ]
+      },
+      "4331": {
+        table: [
+          { intRank: 1, strTeam: "Bayern Munich", intPlayed: 10, intWin: 6, intDraw: 4, intLoss: 0, intGoalDifference: 20, intPoints: 22, form: ["W","D","W","D","W"] },
+          { intRank: 2, strTeam: "Borussia Dortmund", intPlayed: 9, intWin: 6, intDraw: 3, intLoss: 0, intGoalDifference: 9, intPoints: 21, form: ["W","W","D","W","D"] },
+          { intRank: 3, strTeam: "SC Freiburg", intPlayed: 9, intWin: 6, intDraw: 1, intLoss: 2, intGoalDifference: 10, intPoints: 19, form: ["W","L","W","W","L"] },
+          { intRank: 4, strTeam: "RB Leipzig", intPlayed: 9, intWin: 6, intDraw: 0, intLoss: 3, intGoalDifference: 14, intPoints: 18, form: ["W","W","L","W","L"] },
+          { intRank: 5, strTeam: "Bayer Leverkusen", intPlayed: 9, intWin: 5, intDraw: 1, intLoss: 3, intGoalDifference: 3, intPoints: 16, form: ["W","D","L","W","L"] },
+          { intRank: 6, strTeam: "Werder Bremen", intPlayed: 9, intWin: 4, intDraw: 3, intLoss: 2, intGoalDifference: 2, intPoints: 15, form: ["D","W","D","L","W"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Bayern Munich", strAwayTeam: "Borussia Dortmund", dateEvent: "2026-11-28", strTime: "00:30 (+07:00)" },
+          { strHomeTeam: "RB Leipzig", strAwayTeam: "Bayer Leverkusen", dateEvent: "2026-11-28", strTime: "21:30 (+07:00)" }
+        ]
+      },
+      "4334": {
+        table: [
+          { intRank: 1, strTeam: "Paris SG", intPlayed: 11, intWin: 8, intDraw: 2, intLoss: 1, intGoalDifference: 13, intPoints: 26, form: ["W","W","D","W","L"] },
+          { intRank: 2, strTeam: "Lille", intPlayed: 11, intWin: 6, intDraw: 3, intLoss: 2, intGoalDifference: 6, intPoints: 21, form: ["W","D","L","W","D"] },
+          { intRank: 3, strTeam: "Paris FC", intPlayed: 10, intWin: 6, intDraw: 2, intLoss: 2, intGoalDifference: 7, intPoints: 20, form: ["W","W","D","L","W"] },
+          { intRank: 4, strTeam: "Lyon", intPlayed: 11, intWin: 6, intDraw: 2, intLoss: 3, intGoalDifference: 7, intPoints: 20, form: ["L","W","W","D","L"] },
+          { intRank: 5, strTeam: "Marseille", intPlayed: 10, intWin: 6, intDraw: 0, intLoss: 4, intGoalDifference: 8, intPoints: 18, form: ["W","L","W","L","W"] },
+          { intRank: 6, strTeam: "Brest", intPlayed: 11, intWin: 5, intDraw: 3, intLoss: 3, intGoalDifference: 7, intPoints: 18, form: ["D","W","L","W","D"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Paris SG", strAwayTeam: "Marseille", dateEvent: "2026-11-29", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "Lyon", strAwayTeam: "Lille", dateEvent: "2026-11-29", strTime: "23:15 (+07:00)" }
+        ]
+      },
+      "4344": {
+        table: [
+          { intRank: 1, strTeam: "Porto", intPlayed: 11, intWin: 11, intDraw: 0, intLoss: 0, intGoalDifference: 22, intPoints: 33, form: ["W","W","W","W","W"] },
+          { intRank: 2, strTeam: "Benfica", intPlayed: 11, intWin: 9, intDraw: 1, intLoss: 1, intGoalDifference: 20, intPoints: 28, form: ["W","W","D","W","W"] },
+          { intRank: 3, strTeam: "Sporting CP", intPlayed: 11, intWin: 7, intDraw: 3, intLoss: 1, intGoalDifference: 13, intPoints: 24, form: ["W","D","W","D","W"] },
+          { intRank: 4, strTeam: "Santa Clara", intPlayed: 11, intWin: 6, intDraw: 3, intLoss: 2, intGoalDifference: 8, intPoints: 21, form: ["D","W","W","L","D"] },
+          { intRank: 5, strTeam: "Arouca", intPlayed: 11, intWin: 6, intDraw: 2, intLoss: 3, intGoalDifference: 5, intPoints: 20, form: ["W","L","W","D","W"] },
+          { intRank: 6, strTeam: "Académico de Viseu", intPlayed: 11, intWin: 6, intDraw: 2, intLoss: 3, intGoalDifference: 2, intPoints: 20, form: ["D","W","L","W","W"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Marítimo", strAwayTeam: "Nacional", dateEvent: "2026-11-28", strTime: "03:15 (+07:00)" },
+          { strHomeTeam: "Arouca", strAwayTeam: "Rio Ave", dateEvent: "2026-11-28", strTime: "22:30 (+07:00)" },
+          { strHomeTeam: "Vitória SC", strAwayTeam: "Estrela da Amadora", dateEvent: "2026-11-29", strTime: "03:30 (+07:00)" },
+          { strHomeTeam: "Porto", strAwayTeam: "Sporting CP", dateEvent: "2026-11-30", strTime: "03:30 (+07:00)" }
+        ]
+      },
+      "4480": {
+        table: [
+          { intRank: 1, strTeam: "PSG", intPlayed: 4, intWin: 4, intDraw: 0, intLoss: 0, intGoalDifference: 15, intPoints: 12, form: ["W","W","W","W","W"] },
+          { intRank: 2, strTeam: "Real Madrid", intPlayed: 4, intWin: 4, intDraw: 0, intLoss: 0, intGoalDifference: 6, intPoints: 12, form: ["W","W","W","W","W"] },
+          { intRank: 3, strTeam: "Arsenal", intPlayed: 4, intWin: 3, intDraw: 1, intLoss: 0, intGoalDifference: 5, intPoints: 10, form: ["W","W","D","W","W"] },
+          { intRank: 4, strTeam: "Como 1907", intPlayed: 4, intWin: 3, intDraw: 0, intLoss: 1, intGoalDifference: 13, intPoints: 9, form: ["W","W","L","W","W"] },
+          { intRank: 5, strTeam: "Barcelona", intPlayed: 4, intWin: 3, intDraw: 0, intLoss: 1, intGoalDifference: 8, intPoints: 9, form: ["W","L","W","W","W"] },
+          { intRank: 6, strTeam: "Aston Villa", intPlayed: 4, intWin: 3, intDraw: 0, intLoss: 1, intGoalDifference: 6, intPoints: 9, form: ["W","W","L","W","W"] },
+          { intRank: 7, strTeam: "Man City", intPlayed: 4, intWin: 3, intDraw: 0, intLoss: 1, intGoalDifference: 5, intPoints: 9, form: ["W","L","W","W","W"] },
+          { intRank: 8, strTeam: "Liverpool", intPlayed: 4, intWin: 3, intDraw: 0, intLoss: 1, intGoalDifference: 4, intPoints: 9, form: ["W","W","L","W","W"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Arsenal", strAwayTeam: "PSG", dateEvent: "2026-11-25", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "Barcelona", strAwayTeam: "Real Madrid", dateEvent: "2026-11-26", strTime: "03:00 (+07:00)" }
+        ]
+      },
+      "4481": {
+        table: [
+          { intRank: 1, strTeam: "Benfica", intPlayed: 4, intWin: 4, intDraw: 0, intLoss: 0, intGoalDifference: 10, intPoints: 12, form: ["W","W","W","W","W"] },
+          { intRank: 2, strTeam: "Bournemouth", intPlayed: 4, intWin: 4, intDraw: 0, intLoss: 0, intGoalDifference: 9, intPoints: 12, form: ["W","W","W","W","W"] },
+          { intRank: 3, strTeam: "Ferencvárosi TC", intPlayed: 4, intWin: 4, intDraw: 0, intLoss: 0, intGoalDifference: 8, intPoints: 12, form: ["W","W","W","W","W"] },
+          { intRank: 4, strTeam: "Royale Union Saint-Gilloise", intPlayed: 4, intWin: 3, intDraw: 1, intLoss: 0, intGoalDifference: 8, intPoints: 10, form: ["W","D","W","W","W"] },
+          { intRank: 5, strTeam: "Juventus", intPlayed: 4, intWin: 3, intDraw: 1, intLoss: 0, intGoalDifference: 7, intPoints: 10, form: ["D","W","W","W","W"] },
+          { intRank: 6, strTeam: "Olympiacos", intPlayed: 4, intWin: 3, intDraw: 1, intLoss: 0, intGoalDifference: 3, intPoints: 10, form: ["W","W","D","W","W"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Benfica", strAwayTeam: "Juventus", dateEvent: "2026-11-27", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "Bournemouth", strAwayTeam: "Bayer Leverkusen", dateEvent: "2026-11-27", strTime: "00:45 (+07:00)" }
+        ]
+      },
+      "5071": {
+        table: [
+          { intRank: 1, strTeam: "Lugano", intPlayed: 3, intWin: 3, intDraw: 0, intLoss: 0, intGoalDifference: 7, intPoints: 9, form: ["W","W","W","W","W"] },
+          { intRank: 2, strTeam: "Panathinaikos", intPlayed: 3, intWin: 3, intDraw: 0, intLoss: 0, intGoalDifference: 6, intPoints: 9, form: ["W","W","W","W","W"] },
+          { intRank: 3, strTeam: "FC Twente", intPlayed: 3, intWin: 3, intDraw: 0, intLoss: 0, intGoalDifference: 6, intPoints: 9, form: ["W","W","W","W","W"] },
+          { intRank: 4, strTeam: "AS Monaco", intPlayed: 3, intWin: 3, intDraw: 0, intLoss: 0, intGoalDifference: 6, intPoints: 9, form: ["W","W","W","W","W"] },
+          { intRank: 5, strTeam: "Brighton", intPlayed: 3, intWin: 2, intDraw: 1, intLoss: 0, intGoalDifference: 5, intPoints: 7, form: ["W","D","W","W","D"] },
+          { intRank: 6, strTeam: "SK Brann", intPlayed: 3, intWin: 2, intDraw: 1, intLoss: 0, intGoalDifference: 4, intPoints: 7, form: ["D","W","W","W","D"] }
+        ],
+        fixtures: [
+          { strHomeTeam: "Lugano", strAwayTeam: "Brighton", dateEvent: "2026-11-27", strTime: "03:00 (+07:00)" },
+          { strHomeTeam: "AS Monaco", strAwayTeam: "FC Twente", dateEvent: "2026-11-27", strTime: "00:45 (+07:00)" }
+        ]
+      }
+    };
+
+    const LANG = {
+      my: {
+        langBtn: "🌐 English",
+        refreshBtn: "ပြန်ဆွဲရန်",
+        seasonInfo: "AI နှစ်အလိုက် Auto-Season စနစ် အလုပ်လုပ်နေသည်",
+        tabPredict: "AI ခန့်မှန်ရန်",
+        tabTable: "အမှတ်ပေးဇယား",
+        tabHistory: "သိမ်းထားမှုများ",
+        fixturesTitle: "လာမည့်ပွဲစဉ်များ",
+        manualTitle: "အသင်းနှစ်သင်း AI ခွဲခြမ်းစိတ်ဖြာရန်",
+        homePh: "အိမ်ရှင်အသင်း (Home)",
+        awayPh: "ဧည့်သည်အသင်း (Away)",
+        analyzeBtn: "AI + H2H + Form ခန့်မှန်ချက် ထုတ်မည်",
+        resultTitle: "AI ခန့်မှန်ချက် ရလဒ်",
+        saveBtn: "သိမ်းရန်",
+        copyBtn: "ကူးယူရန်",
+        historyTitle: "သိမ်းဆည်းထားသော ခန့်မှန်ချက်များ",
+        clearBtn: "အကုန်ဖျက်ရန်",
+        thCols: ["#", "အသင်း", "ပွဲ", "နိုင်", "သရေ", "ရှုံး", "+/-", "မှတ်"],
+        fixTag: "ခန့်မှန်ရန်",
+        statusReady: "အဆင်သင့်ဖြစ်ပါပြီ — ပွဲစဉ်တစ်ခုကို နှိပ်ပါ။",
+        srcInfo: "ရာသီအလိုက် အမှတ်ပေးဇယား",
+        liveSrcInfo: "Live Server မှ ဆွဲယူထားသော အမှတ်ပေးဇယား",
+        done: "ခန့်မှန်ချက် ထွက်ပါပြီ။",
+        copied: "Copy ကူးပြီးပါပြီ။",
+        saved: "သိမ်းဆည်းပြီးပါပြီ။",
+        noSaved: "သိမ်းထားသော မှတ်တမ်း မရှိသေးပါ။",
+        delBtn: "ဖျက်ရန်",
+        drawLbl: "သရေ",
+        initOut: "ပွဲစဉ်တစ်ခုကို ရွေးနှိပ်ပါ (သို့မဟုတ်) အသင်းနှစ်သင်း ရိုက်ထည့်ပြီး ခန့်မှန်ချက် ထုတ်ကြည့်ပါ။"
+      },
+      en: {
+        langBtn: "🌐 မြန်မာ",
+        refreshBtn: "Refresh",
+        seasonInfo: "AI Auto-Season Engine Active (Updates by Year)",
+        tabPredict: "AI Predictor",
+        tabTable: "Standings",
+        tabHistory: "Saved",
+        fixturesTitle: "Upcoming Fixtures",
+        manualTitle: "Analyze Two Teams with AI",
+        homePh: "Home Team",
+        awayPh: "Away Team",
+        analyzeBtn: "Run AI + H2H + Form Prediction",
+        resultTitle: "AI Prediction Result",
+        saveBtn: "Save",
+        copyBtn: "Copy",
+        historyTitle: "Saved Predictions",
+        clearBtn: "Clear All",
+        thCols: ["#", "Team", "P", "W", "D", "L", "GD", "Pts"],
+        fixTag: "AI Analyze",
+        statusReady: "Ready — tap a fixture below to analyze.",
+        srcInfo: "Season Standings Table",
+        liveSrcInfo: "Live Standings from Render Backend",
+        done: "AI prediction completed.",
+        copied: "Copied to clipboard.",
+        saved: "Saved to history.",
+        noSaved: "No saved predictions yet.",
+        delBtn: "Delete",
+        drawLbl: "Draw",
+        initOut: "Select a fixture above or type two team names and tap Predict."
+      }
+    };
+
+    let isLiveData = false;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      applyLangLabels();
+      renderHistory();
+      selectLeague();
+    });
+
+    function getLeagueLabel(id) {
+      const obj = LEAGUE_NAMES[id];
+      return obj ? obj[lang] : id;
+    }
+
+    function toggleLanguage() {
+      lang = lang === "my" ? "en" : "my";
+      applyLangLabels();
+      const sInfo = getAutoSeasonInfo();
+      document.getElementById("loadStatus").innerHTML = `<span class="ok">${getLeagueLabel(currentLeagueId)} (${sInfo.label}) — ${LANG[lang].statusReady}</span>`;
+      renderFixturesList();
+      renderStandingsTable();
+      renderHistory();
+      if (lastMatchMeta) {
+        buildReportText(lastMatchMeta);
+      } else {
+        document.getElementById("outputBox").textContent = LANG[lang].initOut;
+      }
+    }
+
+    function applyLangLabels() {
+      const t = LANG[lang];
+      const sInfo = getAutoSeasonInfo();
+      document.documentElement.lang = lang;
+      document.getElementById("uiLangBtn").textContent = t.langBtn;
+      document.getElementById("refreshBtn").textContent = t.refreshBtn;
+      document.getElementById("uiSeasonInfo").textContent = t.seasonInfo;
+      document.getElementById("uiSeasonBadge").textContent = `Season ${sInfo.label}`;
+      document.getElementById("tabPredict").textContent = t.tabPredict;
+      document.getElementById("tabTable").textContent = t.tabTable;
+      document.getElementById("tabHistory").textContent = t.tabHistory;
+      document.getElementById("uiFixturesTitle").textContent = `${t.fixturesTitle} (${sInfo.label})`;
+      document.getElementById("uiManualTitle").textContent = t.manualTitle;
+      document.getElementById("homeInput").placeholder = t.homePh;
+      document.getElementById("awayInput").placeholder = t.awayPh;
+      document.getElementById("analyzeBtn").textContent = t.analyzeBtn;
+      document.getElementById("uiResultTitle").textContent = t.resultTitle;
+      document.getElementById("uiSaveBtn").textContent = t.saveBtn;
+      document.getElementById("uiCopyBtn").textContent = t.copyBtn;
+      document.getElementById("uiHistoryTitle").textContent = t.historyTitle;
+      document.getElementById("uiClearBtn").textContent = t.clearBtn;
+
+      const sel = document.getElementById("leagueSelect");
+      Array.from(sel.options).forEach(opt => {
+        if (LEAGUE_NAMES[opt.value]) {
+          opt.text = LEAGUE_NAMES[opt.value][lang];
+        }
+      });
+
+      const ths = document.querySelectorAll("#tableHeadRow th");
+      t.thCols.forEach((col, i) => {
+        if (ths[i]) ths[i].textContent = col;
+      });
+    }
+
+    function switchTab(tab) {
+      document.getElementById("tabPredict").classList.toggle("active", tab === "predict");
+      document.getElementById("tabTable").classList.toggle("active", tab === "table");
+      document.getElementById("tabHistory").classList.toggle("active", tab === "history");
+
+      document.getElementById("viewPredict").style.display = tab === "predict" ? "block" : "none";
+      document.getElementById("viewTable").style.display = tab === "table" ? "block" : "none";
+      document.getElementById("viewHistory").style.display = tab === "history" ? "block" : "none";
+    }
+
+    function applyFallbackLeague(leagueId, sInfo) {
+      isLiveData = false;
+      const db = LEAGUES_DB[leagueId] || { table: [], fixtures: [] };
+      standingsList = db.table.slice();
+      standingsMap = {};
+      standingsList.forEach(row => {
+        standingsMap[row.strTeam.toLowerCase()] = row;
+      });
+      activeEventsList = db.fixtures.map(ev => ({
+        ...ev,
+        dateEvent: shiftDateByYears(ev.dateEvent, sInfo.yearOffset)
+      }));
+      renderFixturesList();
+      renderStandingsTable();
+    }
+
+    async function selectLeague() {
+      currentLeagueId = document.getElementById("leagueSelect").value;
+      const sInfo = getAutoSeasonInfo();
+      applyLangLabels();
+
+      const apiCode = LEAGUE_TO_API_CODE[currentLeagueId];
+      if (!apiCode || !BACKEND_API_URL) {
+        applyFallbackLeague(currentLeagueId, sInfo);
+        document.getElementById("loadStatus").innerHTML =
+          `<span class="ok">${getLeagueLabel(currentLeagueId)} (${sInfo.label}) — ${LANG[lang].statusReady}</span>`;
+        return;
+      }
+
+      document.getElementById("loadStatus").textContent =
+        lang === "my" ? "Live server မှ အချက်အလက် ဆွဲနေသည်..." : "Fetching live data from server...";
+
       try {
-        var res = await fetch(BACKEND_API_URL + "?league=" + encodeURIComponent(league));
-        var data = await res.json();
-        if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
-        renderStandings(data.standings);
-        renderFixtures(data.fixtures);
-        metaText.textContent = "League: " + data.league + " | Updated: " + data.updatedAt + (data.stale ? " (cached)" : "");
+        const res = await fetch(`${BACKEND_API_URL}?league=${encodeURIComponent(apiCode)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+        const mappedTable = (data.standings || []).map(r => ({
+          intRank: r.rank,
+          strTeam: r.team,
+          intPlayed: r.played,
+          intWin: r.won,
+          intDraw: r.draw,
+          intLoss: r.lost,
+          intGoalDifference: r.goalDifference,
+          intPoints: r.points,
+          form: []
+        }));
+
+        const mappedFixtures = (data.fixtures || []).map(m => ({
+          strHomeTeam: m.homeTeam,
+          strAwayTeam: m.awayTeam,
+          dateEvent: m.date || "",
+          strTime: m.time || ""
+        }));
+
+        if (mappedTable.length > 0 || mappedFixtures.length > 0) {
+          isLiveData = true;
+          standingsList = mappedTable;
+          standingsMap = {};
+          standingsList.forEach(row => {
+            standingsMap[row.strTeam.toLowerCase()] = row;
+          });
+          activeEventsList = mappedFixtures;
+          renderFixturesList();
+          renderStandingsTable();
+          document.getElementById("loadStatus").innerHTML =
+            `<span class="ok">${getLeagueLabel(currentLeagueId)} (${sInfo.label}) — ${LANG[lang].statusReady} [LIVE]</span>`;
+          return;
+        }
+
+        applyFallbackLeague(currentLeagueId, sInfo);
+        document.getElementById("loadStatus").innerHTML =
+          `<span class="ok">${getLeagueLabel(currentLeagueId)} (${sInfo.label}) — ${LANG[lang].statusReady}</span>`;
       } catch (err) {
-        metaText.textContent = "Failed to load data";
-        statusText.textContent = "Error: " + err.message;
+        applyFallbackLeague(currentLeagueId, sInfo);
+        document.getElementById("loadStatus").innerHTML =
+          `<span class="ok">${getLeagueLabel(currentLeagueId)} (${sInfo.label}) — ${LANG[lang].statusReady}</span>`;
       }
     }
 
-    leagueSelect.addEventListener("change", loadFootball);
-    refreshBtn.addEventListener("click", loadFootball);
-    loadFootball();
+    function renderFixturesList() {
+      const listEl = document.getElementById("fixtureList");
+      listEl.innerHTML = "";
+      const tagLabel = LANG[lang].fixTag;
+
+      activeEventsList.forEach(ev => {
+        const item = document.createElement("div");
+        item.className = "fixture-item";
+        item.innerHTML = `
+          <div>
+            <div class="fix-teams">${ev.strHomeTeam} vs ${ev.strAwayTeam}</div>
+            <div class="fix-date">${ev.dateEvent} ${ev.strTime}</div>
+          </div>
+          <div class="fix-tag">${tagLabel}</div>
+        `;
+        item.onclick = () => {
+          document.querySelectorAll(".fixture-item").forEach(el => el.classList.remove("selected"));
+          item.classList.add("selected");
+          document.getElementById("homeInput").value = ev.strHomeTeam;
+          document.getElementById("awayInput").value = ev.strAwayTeam;
+          runProAI(ev.dateEvent);
+        };
+        listEl.appendChild(item);
+      });
+    }
+
+    function renderStandingsTable() {
+      const t = LANG[lang];
+      const sInfo = getAutoSeasonInfo();
+      document.getElementById("tableTitle").textContent = `${getLeagueLabel(currentLeagueId)} - ${t.tabTable} (${sInfo.label})`;
+      const noteTxt = isLiveData ? t.liveSrcInfo : t.srcInfo;
+      document.getElementById("tableSourceNote").innerHTML = `<span class="ok">${noteTxt} (${sInfo.label})</span>`;
+      const tbody = document.getElementById("standingsBody");
+      tbody.innerHTML = "";
+
+      standingsList.forEach(r => {
+        const gd = parseInt(r.intGoalDifference || 0, 10);
+        const gdStr = gd > 0 ? `+${gd}` : `${gd}`;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.intRank}</td>
+          <td style="font-weight:700; color:#fff;">${r.strTeam}</td>
+          <td>${r.intPlayed}</td>
+          <td>${r.intWin}</td>
+          <td>${r.intDraw}</td>
+          <td>${r.intLoss}</td>
+          <td>${gdStr}</td>
+          <td style="font-weight:800; color:#34d399;">${r.intPoints}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function findTeamRow(name) {
+      const q = (name || "").toLowerCase().trim();
+      if (!q) return null;
+      if (standingsMap[q]) return standingsMap[q];
+      const key = Object.keys(standingsMap).find(k => k.includes(q) || q.includes(k));
+      if (key) return standingsMap[key];
+
+      for (const lid of Object.keys(LEAGUES_DB)) {
+        const found = LEAGUES_DB[lid].table.find(
+          t => t.strTeam.toLowerCase() === q || t.strTeam.toLowerCase().includes(q) || q.includes(t.strTeam.toLowerCase())
+        );
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function renderFormPills(containerId, formArr) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = "";
+      if (!formArr || formArr.length === 0) {
+        el.innerHTML = `<span style="font-size:10px; color:#64748b;">-</span>`;
+        return;
+      }
+      formArr.forEach(res => {
+        const span = document.createElement("span");
+        span.className = `f-badge f-${res}`;
+        span.textContent = res;
+        el.appendChild(span);
+      });
+    }
+
+    function buildReportText(meta) {
+      const {
+        home, away, matchDate, leagueName, seasonLabel,
+        homeProb, drawProb, awayProb,
+        expH, expA, overProb, bttsProb,
+        hFormTxt, aFormTxt, hRank, hPts, aRank, aPts
+      } = meta;
+
+      const maxP = Math.max(homeProb, drawProb, awayProb);
+      const drawLabel = LANG[lang].drawLbl;
+
+      document.getElementById("lblHome").textContent = `${home}: ${homeProb}%`;
+      document.getElementById("lblDraw").textContent = `${drawLabel}: ${drawProb}%`;
+      document.getElementById("lblAway").textContent = `${away}: ${awayProb}%`;
+
+      if (lang === "my") {
+        const conf = maxP >= 56 ? "မြင့်မား" : maxP >= 42 ? "အသင့်အတင့်" : "ပွဲကျပ်";
+        let pick = `${home} (နိုင် သို့မဟုတ် သရေ)`;
+        if (homeProb >= awayProb + 14) pick = `${home} နိုင်ခြေ အသာ`;
+        else if (awayProb >= homeProb + 14) pick = `${away} နိုင်ခြေ အသာ`;
+        else if (awayProb > homeProb) pick = `${away} (နိုင် သို့မဟုတ် သရေ)`;
+        else if (homeProb === awayProb) pick = `သရေ`;
+
+        lastGeneratedTitle = `${home} vs ${away} (${homeProb}%-${drawProb}%-${awayProb}%)`;
+        lastGeneratedReport =
+`⚡ AI PRO ခန့်မှန်ချက်: ${home} vs ${away} ${matchDate ? "(" + matchDate + ")" : ""}
+🏆 ပြိုင်ပွဲ: ${leagueName} | ရာသီ: ${seasonLabel}
+
+📊 1X2 ဖြစ်နိုင်ခြေ
+• ${home} နိုင်ခြေ: ${homeProb}%
+• သရေ: ${drawProb}%
+• ${away} နိုင်ခြေ: ${awayProb}%
+
+🎯 AI ရွေးချယ်မှုနှင့် ဂိုးဈေးကွက်
+• AI ရွေးချယ်မှု: ${pick} (${conf})
+• မျှော်မှန်းဂိုး (xG): ${home} ${expH.toFixed(2)} - ${expA.toFixed(2)} ${away}
+• Over 2.5 ဂိုး: ${overProb}% | Under 2.5 ဂိုး: ${100 - overProb}%
+• BTTS (နှစ်သင်းလုံး ဂိုးရ): ${bttsProb}%
+
+📈 နောက်ဆုံး ၅ ပွဲ Form နှင့် အမှတ်ပေးဇယား
+• ${home}: ${hFormTxt} (အဆင့် #${hRank}, မှတ် ${hPts})
+• ${away}: ${aFormTxt} (အဆင့် #${aRank}, မှတ် ${aPts})
+
+⚠️ မှတ်ချက်: စာရင်းအင်းနှင့် Simulation အပေါ် အခြေခံတွက်ချက်ထားခြင်းသာ ဖြစ်ပါသည်။`;
+      } else {
+        const conf = maxP >= 56 ? "High" : maxP >= 42 ? "Moderate" : "Tight Match";
+        let pick = `${home} or Draw (1X)`;
+        if (homeProb >= awayProb + 14) pick = `${home} Win`;
+        else if (awayProb >= homeProb + 14) pick = `${away} Win`;
+        else if (awayProb > homeProb) pick = `${away} or Draw (X2)`;
+        else if (homeProb === awayProb) pick = `Draw`;
+
+        lastGeneratedTitle = `${home} vs ${away} (${homeProb}%-${drawProb}%-${awayProb}%)`;
+        lastGeneratedReport =
+`⚡ AI PRO Prediction: ${home} vs ${away} ${matchDate ? "(" + matchDate + ")" : ""}
+🏆 Competition: ${leagueName} | Season: ${seasonLabel}
+
+📊 1X2 Probabilities
+• ${home} Win: ${homeProb}%
+• Draw: ${drawProb}%
+• ${away} Win: ${awayProb}%
+
+🎯 AI Pick & Markets
+• AI Pick: ${pick} (${conf})
+• Expected Goals (xG): ${home} ${expH.toFixed(2)} - ${expA.toFixed(2)} ${away}
+• Over 2.5 Goals: ${overProb}% | Under 2.5: ${100 - overProb}%
+• BTTS: ${bttsProb}%
+
+📈 Last 5 Form & Standings
+• ${home}: ${hFormTxt} (Rank #${hRank}, Pts ${hPts})
+• ${away}: ${aFormTxt} (Rank #${aRank}, Pts ${aPts})
+
+⚠️ Disclaimer: Based on statistical modeling & simulation; not a guaranteed result.`;
+      }
+
+      document.getElementById("outputBox").textContent = lastGeneratedReport;
+    }
+
+    function runProAI(matchDate = "") {
+      const home = document.getElementById("homeInput").value.trim();
+      const away = document.getElementById("awayInput").value.trim();
+      const status = document.getElementById("predStatus");
+      const sInfo = getAutoSeasonInfo();
+
+      if (!home || !away) {
+        status.innerHTML = `<span class="err">${lang === "my" ? "အိမ်ရှင်နဲ့ ဧည့်သည် အသင်းနာမည် ထည့်ပါ။" : "Enter both Home and Away team names."}</span>`;
+        return;
+      }
+
+      const hRow = findTeamRow(home);
+      const aRow = findTeamRow(away);
+      const hFormArr = hRow && Array.isArray(hRow.form) ? hRow.form : [];
+      const aFormArr = aRow && Array.isArray(aRow.form) ? aRow.form : [];
+
+      document.getElementById("matchupBox").style.display = "block";
+      document.getElementById("homeNameLbl").textContent = home;
+      document.getElementById("awayNameLbl").textContent = away;
+      document.getElementById("homeLogoImg").src = FALLBACK_BADGE;
+      document.getElementById("awayLogoImg").src = FALLBACK_BADGE;
+      renderFormPills("homeFormPills", hFormArr);
+      renderFormPills("awayFormPills", aFormArr);
+
+      const hP = hRow ? Math.max(1, hRow.intPlayed) : 10;
+      const hW = hRow ? hRow.intWin : 4;
+      const hD = hRow ? hRow.intDraw : 3;
+      const hGD = hRow ? hRow.intGoalDifference : 2;
+      const hRank = hRow ? hRow.intRank : "-";
+      const hPts = hRow ? hRow.intPoints : "-";
+
+      const aP = aRow ? Math.max(1, aRow.intPlayed) : 10;
+      const aW = aRow ? aRow.intWin : 4;
+      const aD = aRow ? aRow.intDraw : 3;
+      const aGD = aRow ? aRow.intGoalDifference : 1;
+      const aRank = aRow ? aRow.intRank : "-";
+      const aPts = aRow ? aRow.intPoints : "-";
+
+      const hPPG = (hW * 3 + hD) / hP;
+      const aPPG = (aW * 3 + aD) / aP;
+      const hGDpg = hGD / hP;
+      const aGDpg = aGD / aP;
+
+      const formScore = arr => arr.length
+        ? arr.reduce((sum, c) => sum + (c === "W" ? 3 : c === "D" ? 1 : 0), 0) / arr.length
+        : 1.4;
+
+      const hPower = Math.max(0.35, hPPG * 0.5 + hGDpg * 0.35 + (formScore(hFormArr) - 1.4) * 0.25 + 0.32);
+      const aPower = Math.max(0.35, aPPG * 0.5 + aGDpg * 0.35 + (formScore(aFormArr) - 1.4) * 0.25);
+
+      const powerRatio = hPower / (hPower + aPower);
+      let expH = Math.max(0.35, Math.min(3.5, 1.15 + powerRatio * 1.15));
+      let expA = Math.max(0.30, Math.min(3.2, 1.05 + (1 - powerRatio) * 1.05));
+
+      let simH = 0, simD = 0, simA = 0, simO25 = 0, simBTTS = 0;
+      const scoreCounts = {};
+      const sims = 4000;
+
+      for (let i = 0; i < sims; i++) {
+        const gH = samplePoisson(expH);
+        const gA = samplePoisson(expA);
+        if (gH > gA) simH++;
+        else if (gH === gA) simD++;
+        else simA++;
+
+        if (gH + gA >= 3) simO25++;
+        if (gH > 0 && gA > 0) simBTTS++;
+
+        const key = `${gH}-${gA}`;
+        scoreCounts[key] = (scoreCounts[key] || 0) + 1;
+      }
+
+      const sortedScores = Object.entries(scoreCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+
+      document.getElementById("scoreChips").style.display = "grid";
+      sortedScores.forEach((item, idx) => {
+        const pct = Math.round((item[1] / sims) * 100);
+        document.getElementById(`topScore${idx + 1}`).textContent = item[0];
+        document.getElementById(`topScore${idx + 1}P`).textContent = `${pct}%`;
+      });
+
+      let drawProb = Math.max(16, Math.min(34, Math.round((simD / sims) * 100)));
+      const rem = 100 - drawProb;
+      const mcShare = (simH + simA) > 0 ? simH / (simH + simA) : 0.5;
+      const finalShare = mcShare * 0.65 + powerRatio * 0.35;
+
+      let homeProb = Math.round(finalShare * rem);
+      let awayProb = 100 - drawProb - homeProb;
+
+      const overProb = Math.round((simO25 / sims) * 100);
+      const bttsProb = Math.round((simBTTS / sims) * 100);
+
+      document.getElementById("probWrap").style.display = "block";
+      document.getElementById("barHome").style.width = homeProb + "%";
+      document.getElementById("barDraw").style.width = drawProb + "%";
+      document.getElementById("barAway").style.width = awayProb + "%";
+
+      lastMatchMeta = {
+        home, away, matchDate,
+        leagueName: getLeagueLabel(currentLeagueId),
+        seasonLabel: sInfo.label,
+        homeProb, drawProb, awayProb,
+        expH, expA, overProb, bttsProb,
+        hFormTxt: hFormArr.length ? hFormArr.join("-") : "N/A",
+        aFormTxt: aFormArr.length ? aFormArr.join("-") : "N/A",
+        hRank, hPts, aRank, aPts
+      };
+
+      buildReportText(lastMatchMeta);
+      status.innerHTML = `<span class="ok">${LANG[lang].done}</span>`;
+    }
+
+    function samplePoisson(lambda) {
+      const L = Math.exp(-lambda);
+      let k = 0, p = 1;
+      do { k++; p *= Math.random(); } while (p > L && k < 10);
+      return k - 1;
+    }
+
+    function saveCurrentPrediction() {
+      if (!lastGeneratedReport) return;
+      const list = JSON.parse(localStorage.getItem("ai_match_history") || "[]");
+      list.unshift({ title: lastGeneratedTitle, time: new Date().toLocaleString(), report: lastGeneratedReport });
+      localStorage.setItem("ai_match_history", JSON.stringify(list.slice(0, 20)));
+      renderHistory();
+      document.getElementById("predStatus").innerHTML = `<span class="ok">${LANG[lang].saved}</span>`;
+    }
+
+    function renderHistory() {
+      const container = document.getElementById("historyList");
+      const list = JSON.parse(localStorage.getItem("ai_match_history") || "[]");
+      if (list.length === 0) {
+        container.innerHTML = `<div style="font-size:13px; color:#94a3b8;">${LANG[lang].noSaved}</div>`;
+        return;
+      }
+      container.innerHTML = "";
+      list.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.style.cssText = "background:#0a0f16; border:1px solid #222e40; border-radius:10px; padding:10px;";
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="font-size:13px; color:#34d399;">${item.title}</strong>
+            <button class="btn btn-sm" onclick="deleteHistory(${idx})">${LANG[lang].delBtn}</button>
+          </div>
+          <div style="font-size:11px; color:#64748b; margin-bottom:6px;">${item.time}</div>
+          <pre style="white-space:pre-wrap; font-size:12px; color:#cbd5e1; font-family:inherit;">${item.report}</pre>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function deleteHistory(idx) {
+      const list = JSON.parse(localStorage.getItem("ai_match_history") || "[]");
+      list.splice(idx, 1);
+      localStorage.setItem("ai_match_history", JSON.stringify(list));
+      renderHistory();
+    }
+
+    function clearHistory() {
+      localStorage.removeItem("ai_match_history");
+      renderHistory();
+    }
+
+    function copyOut() {
+      const txt = document.getElementById("outputBox").textContent;
+      navigator.clipboard.writeText(txt).then(() => {
+        document.getElementById("predStatus").innerHTML = `<span class="ok">${LANG[lang].copied}</span>`;
+      });
+    }
   </script>
 </body>
 </html>
